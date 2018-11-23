@@ -20,8 +20,9 @@ class People extends CI_Controller
 
 					/**********###############*******REGISTER MODULE GOES HERE********#################***********/
 	
-	public function register()
-	{		
+	public function register() 
+	{
+		
 		if ($this->input->server('REQUEST_METHOD') == 'POST')
 		{
 			
@@ -51,15 +52,23 @@ class People extends CI_Controller
 	}
 }
 
+				/**********###############*******DELETION MODULE GOES HERE********#################***********/
 
 	public function delete()
 	{	
 		if ($this->input->server('REQUEST_METHOD') == 'POST') 
 		{
-		     
-			 $email = $this->input->get('email');			 
-			 $deleted = $this->peoplemodel->deleteperson($email);
+			 $email = $this->input->POST('email');	
+		     if(!empty($email))
+		     {
+		     $deleted = $this->peoplemodel->deleteperson($email);
 			 echo json_encode($deleted);
+			 echo "user deleted";
+			 }		     }
+		     else
+		     {
+		     	echo"enter emailid";
+		     } 
 		
 		}
 	}
@@ -68,7 +77,8 @@ class People extends CI_Controller
 	 			/**********########@@@@@#########*******UPDATE MODULE GOES HERE********#########@@@@@########***********/
 
 	public function update() 
-	{		
+	{
+		
 		if ($this->input->server('REQUEST_METHOD') == 'POST') 
 		{			
 			$fullname = $this->input->post('fullname');
@@ -133,5 +143,19 @@ class People extends CI_Controller
 			echo "enter email id to check whether user is found or not";
 			}*/
 		}	
+	}
+
+
+	public function login()
+	{
+		if ($this->input->server('REQUEST_METHOD') == 'POST') 
+		{	
+			$email= $this->input->POST('email');
+			$pass = $this->input->POST('pass');
+			if(!empty($email),!empty($pass))
+			{
+				$login = $this->peoplemodel->login();
+			}
+		}
 	}
 }
