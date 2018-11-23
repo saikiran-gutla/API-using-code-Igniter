@@ -20,8 +20,8 @@ class People extends CI_Controller
 
 					/**********###############*******REGISTER MODULE GOES HERE********#################***********/
 	
-	public function register() {
-		
+	public function register()
+	{		
 		if ($this->input->server('REQUEST_METHOD') == 'POST')
 		{
 			
@@ -49,6 +49,7 @@ class People extends CI_Controller
 				echo "please enter all details........";
 		}
 	}
+}
 
 
 	public function delete()
@@ -62,14 +63,12 @@ class People extends CI_Controller
 		
 		}
 	}
-	}
 	
 	
 	 			/**********########@@@@@#########*******UPDATE MODULE GOES HERE********#########@@@@@########***********/
 
 	public function update() 
-	{
-		
+	{		
 		if ($this->input->server('REQUEST_METHOD') == 'POST') 
 		{			
 			$fullname = $this->input->post('fullname');
@@ -81,7 +80,7 @@ class People extends CI_Controller
 			if(!empty($fullname) && !empty($email) && !empty($mobile) && !empty($gender) && !empty($dob) && !empty($pass))
 			{			
 			$update = $this->peoplemodel->updatePerson($fullname, $email, $mobile, $gender, $dob, $pass);
-			//echo json_encode($update);
+			echo json_encode($update);
 			echo "Updated succesfully";
 			}
 			else
