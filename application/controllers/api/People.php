@@ -70,7 +70,6 @@ class People extends CI_Controller
 		     	echo"enter emailid";
 		     } 
 		
-		}
 	}
 	
 	
@@ -152,9 +151,17 @@ class People extends CI_Controller
 		{	
 			$email= $this->input->POST('email');
 			$pass = $this->input->POST('pass');
-			if(!empty($email),!empty($pass))
+			if(!empty($email) && !empty($pass))
 			{
-				$login = $this->peoplemodel->login();
+				$login = $this->peoplemodel->login($email,$pass);
+				/*if($login)
+				{
+					echo "user found";
+				}*/
+			}
+			else
+			{
+				echo "enter mail and pwd";
 			}
 		}
 	}

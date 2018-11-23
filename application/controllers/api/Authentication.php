@@ -20,7 +20,7 @@ class Authentication extends REST_Controller {
     public function login_post() {
         // Get the post data
         $email = $this->post('email');
-        $password = $this->post('password');
+        $password = $this->post('password'); 
         // Validate the post data
         if(!empty($email) && !empty($password)){
             

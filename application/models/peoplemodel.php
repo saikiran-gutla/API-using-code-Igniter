@@ -84,6 +84,7 @@ class peoplemodel extends CI_Model {
 	
 		public function login($email,$pass)
 		{
-			$login =  $this->db->query("select email,pass from admin where email='$email',pass='$pass'");
+			$login =  $this->db->query("select email,pass from admin where email='$email' and pass='$pass'");
+			echo json_encode($login->result_array());
 		}
 }
