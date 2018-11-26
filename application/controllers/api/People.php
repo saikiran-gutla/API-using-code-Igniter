@@ -4,8 +4,10 @@ class People extends CI_Controller
 {
 	
 	function __construct() 
-	{
+	{		
 		parent::__construct();
+		$this->load->library('form_validation');    
+        $this->form_validation->set_error_delimiters('<div class="error">', '</div>');
 		$this->load->database();
 		$this->load->model('peoplemodel');
 	}
@@ -34,20 +36,21 @@ class People extends CI_Controller
 			$pass = $this->input->post('pass');	
 			if(!empty($fullname) && !empty($email) && !empty($mobile) && !empty($gender) && !empty($dob) && !empty($pass))
 			{
-			$data = $this->peoplemodel->insertperson($fullname, $email, $mobile, $gender, $dob, $pass);
-			if($data)
+			//$data = $this->peoplemodel->insertperson($fullname, $email, $mobile, $gender, $dob, $pass);
+			if($this->peoplemodel->isDuplicate($this->input->post('email')))
 			{
-				echo "user registration failed....";				
+           	echo "user already exists....";				
 			}
 			else
 			{
+				$data = $this->peoplemodel->insertperson($fullname, $email, $mobile, $gender, $dob, $pass);
 				echo "user registered succesfully.....";
 			}
 			//echo json_encode($data);			
 		}
 		else
 		{
-				echo "please enter all details........";
+				echo "please fill all details........";
 		}
 	}
 }
@@ -61,16 +64,26 @@ class People extends CI_Controller
 			 $email = $this->input->POST('email');	
 		     if(!empty($email))
 		     {
-		     $deleted = $this->peoplemodel->deleteperson($email);
-			 echo json_encode($deleted);
-			 echo "user deleted";
-			 }		     }
+		     //$deleted = $this->peoplemodel->deleteperson($email);
+			 //echo json_encode($deleted);
+			 //echo "user deleted";
+			if($this->peoplemodel->isexists($this->input->post('email')))
+			{
+			$this->peoplemodel->deleteperson($email);
+			echo "user deleted succesfully.....";           		
+			}
+			else
+			{				
+				echo "user not found...might be already deleted.";	
+			}
+			 }
 		     else
 		     {
 		     	echo"enter emailid";
 		     } 
 		
 	}
+}
 	
 	
 	 			/**********########@@@@@#########*******UPDATE MODULE GOES HERE********#########@@@@@########***********/
@@ -88,16 +101,23 @@ class People extends CI_Controller
 			$pass = $this->input->post('pass');	
 			if(!empty($fullname) && !empty($email) && !empty($mobile) && !empty($gender) && !empty($dob) && !empty($pass))
 			{			
-			$update = $this->peoplemodel->updatePerson($fullname, $email, $mobile, $gender, $dob, $pass);
-			echo json_encode($update);
-			echo "Updated succesfully";
+			//$update = $this->peoplemodel->updatePerson($fullname, $email, $mobile, $gender, $dob, $pass);
+			if($this->peoplemodel->isexists($this->input->post('email')))
+			{
+			$this->peoplemodel->updatePerson($fullname, $email, $mobile, $gender, $dob, $pass);
+           	echo "user  found..updated succesfully..";				
 			}
+			else
+			{
+				echo "user not found...cannot update the data..";
+			}
+		}
 			else
 			{
 				echo "enter complete data";
 			}
-		}
 	}
+}
 		
 				/**********########@@@@@#########*******DISPLAY MODULE GOES HERE********#########@@@@@########***********/
 
@@ -109,16 +129,17 @@ class People extends CI_Controller
 			 $email = $this->input->POST('email');	
 			 if(!empty($email))
 			 {
-			 $data= $this->peoplemodel->getPerson($email);		 
-			 if(empty($data))
-			 {
-			 	echo "Details found";
-			 }
-			 else
-			 {
-			 	echo "Details Not found";
-			 }
-			 }
+			 //$data= $this->peoplemodel->getPerson($email);		 
+			 if($this->peoplemodel->isexists($this->input->post('email')))
+			{
+			$this->peoplemodel->getPerson($email);
+           	echo "user  found....";				
+			}
+			else
+			{
+				echo "user not found.....";
+			}
+		}
 			 else
 			 {
 			 	echo "Please enter email id to show the details of a person";
@@ -145,6 +166,8 @@ class People extends CI_Controller
 	}
 
 
+			/**********########@@@@@#########*******LOGIN MODULE GOES HERE********#########@@@@@########***********/
+
 	public function login()
 	{
 		if ($this->input->server('REQUEST_METHOD') == 'POST') 
@@ -153,11 +176,16 @@ class People extends CI_Controller
 			$pass = $this->input->POST('pass');
 			if(!empty($email) && !empty($pass))
 			{
-				$login = $this->peoplemodel->login($email,$pass);
-				/*if($login)
-				{
-					echo "user found";
-				}*/
+				//$login = $this->peoplemodel->login($email,$pass);
+			if($this->peoplemodel->isuser($email,$pass))
+			{
+			echo "Login Credentials found succesfully.....";  
+			$login = $this->peoplemodel->login($email,$pass);         		
+			}
+			else
+			{				
+				echo "Login credentials not found.";	
+			}
 			}
 			else
 			{
