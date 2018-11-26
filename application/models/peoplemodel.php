@@ -73,8 +73,6 @@ class peoplemodel extends CI_Model {
 		public function updatePerson($fullname, $email, $mobile, $gender, $dob, $pass) 
 		{		
 		$update = $this->db->query("update admin set fullname='$fullname',mobile='$mobile', gender='$gender',dob='$dob',pass='$pass' where email='$email'"); 
-		$data = $update->result_array();
-		echo json_encode($data);
 		//echo json_encode($update->result_array());
 		/*$this->db->where('email', $email);
 		$this->db->set('fullname', $fullname);
@@ -89,12 +87,12 @@ class peoplemodel extends CI_Model {
 	
 		public function login($email,$pass)
 		{
-			$login =  $this->db->query("select fullname,email from admin where email='$email' and pass='$pass'");
-			/*$login= $this->db->select('fullname,email');
-			$this->db->from('admin');
-			$this->db->where('email',$email);
-			$this->db->where('pass',$pass);*/
-			echo json_encode($login->result_array());
+			//$login =  $this->db->query("select fullname,email from admin where email='$email' and pass='$pass'");
+			$this->db->select('fullname,email');
+			//$this->db->from('admin');
+			$this->db->where(array ('email'=>$email,'pass'=>$pass));
+			$login = $this->db->get('admin');
+			echo json_encode($login->row_array());
 		}
 
 

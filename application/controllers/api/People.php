@@ -39,7 +39,7 @@ class People extends CI_Controller
 			//$data = $this->peoplemodel->insertperson($fullname, $email, $mobile, $gender, $dob, $pass);
 			if($this->peoplemodel->isDuplicate($this->input->post('email')))
 			{
-           	echo "user already exists....";				
+           	echo "user already exists...Please try another emailid..";				
 			}
 			else
 			{
@@ -89,8 +89,7 @@ class People extends CI_Controller
 	 			/**********########@@@@@#########*******UPDATE MODULE GOES HERE********#########@@@@@########***********/
 
 	public function update() 
-	{
-		
+	{		
 		if ($this->input->server('REQUEST_METHOD') == 'POST') 
 		{			
 			$fullname = $this->input->post('fullname');
@@ -105,7 +104,7 @@ class People extends CI_Controller
 			if($this->peoplemodel->isexists($this->input->post('email')))
 			{
 			$this->peoplemodel->updatePerson($fullname, $email, $mobile, $gender, $dob, $pass);
-           	echo "user  found..updated succesfully..";				
+           	echo "user  found....updated succesfully..";				
 			}
 			else
 			{
